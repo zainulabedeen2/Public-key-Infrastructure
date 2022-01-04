@@ -1,0 +1,41 @@
+Task 1
+Copy the configuration file into current directory:
+
+cp /usr/lib/ssl/openssl.cnf ./openssl.cnf 
+create new sub-directories and files according to what it specifies in its [ CA_default ] section:
+
+dir = ./demoCA # Where everything is kept
+certs = $dir/certs # Where the issued certs are kept
+crl_dir = $dir/crl # Where the issued crl are kept
+new_certs_dir = $dir/newcerts # default place for new certs.
+database = $dir/index.txt # database index file.
+serial = $dir/serial # The current serial number
+Simply create an empty file for index.txt, put a single number in string format in serial:
+
+cp "/usr/lib/ssl/openssl.cnf" "/home/seed/PKI/"
+mkdir demoWK
+cd demoWK
+mkdir certs crl newcerts
+echo 1000 > serial
+gedit index.txt
+Start to generate the self-signed certificate for the CA:
+
+# return to the parent directory
+# cd ..
+openssl req -new -x509 -keyout ca.key -out ca.crt -config openssl.cnf 
+When asked to type PEM pass phrase, remember the password you typed (e.g. I use seeddes). It will then ask you to fill in some information, you can skip it by Enter, except for those required by policy_match.
+
+Generating a 2048 bit RSA private key
+...................+++
+.............................................................................+++
+writing new private key to 'ca.key'
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
